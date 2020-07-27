@@ -22,15 +22,10 @@ getJSON(requestURL + `?results=${employeeCount}`)
     .then(response => employees = response.results)
     .catch(e => console.error('Error in fetch:', e));
 
-function createEmployeeCard(employee) {
-    const card = document.createElement('div');
-    card.classList.add('card');
-
-    const cardImg = document.createElement('div');
-    cardImg.classList.add('card-img-container');
-
-    const cardInfo = document.createElement('div');
-    cardInfo.classList.add('card-info-container');
+const createEmployeeCard = function (employee) {
+    const card = createDiv('card');
+    const cardImg = createDiv('card-img-container');
+    const cardInfo = createDiv('card-info-container');
 
     card.appendChild(cardImg);
     card.appendChild(cardInfo);
@@ -41,6 +36,13 @@ function createEmployeeCard(employee) {
                         <p class="card-text cap">${employee.location.city}, ${employee.location.state}</p>`
 
     return card;
+}
+
+const createDiv = function(className) {
+    const div = document.createElement('div');
+    div.classList.add(className);
+
+    return div;
 }
 
 function createGallery() {
