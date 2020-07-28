@@ -206,7 +206,11 @@ header h1 {
     transition: .4s ease-out;
     outline: none;
   }
-  
+
+.modal-btn-container .btn:disabled {
+    cursor: default;
+    opacity: 20%;
+}
 
 /* ===================================== 
    Media Queries
@@ -256,7 +260,7 @@ header h1 {
         color: rgba(25, 25, 25, 1); 
     }
 
-    .btn:hover {
+    .btn:enabled:hover {
         background: rgba(255, 255, 255, 1);
         color: rgba(25, 25, 25, 1); 
     }

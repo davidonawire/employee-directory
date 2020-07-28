@@ -6,6 +6,7 @@
 const requestURL = 'https://randomuser.me/api/';
 const employeeCount = 12;
 let employees = [];
+let currentEmployeeIndex = 0;
 const gallery = document.getElementById('gallery');
 
 
@@ -25,6 +26,11 @@ function init() {
     .catch(e => console.error('Error in fetch:', e));
 
     createModal();
+
+    const prevButton = document.getElementById('modal-prev');
+    const nextButton = document.getElementById('modal-next');
+    prevButton.addEventListener('click', showPrevEmployee);
+    nextButton.addEventListener('click', showNextEmployee);
 }
 
 
@@ -91,7 +97,7 @@ function createModal() {
 }
 
 const showEmployeeDetail = function (employee) {
-    const employeeIndex = employees.indexOf(employee);
+    currentEmployeeIndex = employees.indexOf(employee);
     const modalInfo = document.querySelector('.modal-info-container');
     const birthdayDate = new Date(employee.dob.date);
     const birthday = `${birthdayDate.getMonth()}/${birthdayDate.getDate()}/${birthdayDate.getFullYear()}`;
@@ -108,10 +114,36 @@ const showEmployeeDetail = function (employee) {
     <p class="modal-text">Birthday: ${birthday}</p>`;
 
     modalInfo.innerHTML = detailHTML;
+    updateNavButtons();
+}
+
+function showPrevEmployee() {
+    showEmployeeDetail(employees[currentEmployeeIndex - 1]);
+}
+
+function showNextEmployee() {
+    showEmployeeDetail(employees[currentEmployeeIndex + 1]);
+}
+
+function updateNavButtons() {
+    const prevButton = document.getElementById('modal-prev');
+    const nextButton = document.getElementById('modal-next');
+
+    if (currentEmployeeIndex === 0) {
+        prevButton.disabled = true;
+    } else {
+        prevButton.disabled = false;
+    }
+
+    if (currentEmployeeIndex === employees.length - 1) {
+        nextButton.disabled = true;
+    } else {
+        nextButton.disabled = false;
+    }
 }
 
 function show(element) {
-    element.style.display = 'inherit';
+    element.style.display = 'block';
 }
 
 function hide(element) {
