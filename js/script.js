@@ -5,7 +5,8 @@
 
 const requestURL = 'https://randomuser.me/api/';
 const employeeCount = 12;
-let employees = [];
+let fetchedEmployees = [];
+let displayedEmployees = [];
 let currentEmployeeIndex = 0;
 const gallery = document.getElementById('gallery');
 
@@ -19,10 +20,14 @@ async function getJSON(url) {
     }
 }
 
+// Fetch our set of employees, display the initial gallery, and build our details modal
 function init() {
     getJSON(requestURL + `?nat=US&results=${employeeCount}`)
-    .then(response => employees = response.results)
-    .then(createGallery)
+    .then((response) => { 
+        fetchedEmployees = response.results;
+        displayedEmployees = fetchedEmployees;
+    })
+    .then(() => showGallery(displayedEmployees))
     .catch(e => console.error('Error in fetch:', e));
 
     createModal();
@@ -31,6 +36,13 @@ function init() {
     const nextButton = document.getElementById('modal-next');
     prevButton.addEventListener('click', showPrevEmployee);
     nextButton.addEventListener('click', showNextEmployee);
+}
+
+
+function showGallery(employees) {
+    employees.forEach(employee => {
+        gallery.appendChild( createEmployeeCard(employee) );
+    });
 }
 
 
@@ -55,18 +67,6 @@ const createEmployeeCard = function (employee) {
     return card;
 }
 
-const createDiv = function(className) {
-    const div = document.createElement('div');
-    div.classList.add(className);
-
-    return div;
-}
-
-function createGallery() {
-    employees.forEach(employee => {
-        gallery.appendChild( createEmployeeCard(employee) );
-    });
-}
 
 function createModal() {
     const container = createDiv('modal-container');
@@ -97,7 +97,7 @@ function createModal() {
 }
 
 const showEmployeeDetail = function (employee) {
-    currentEmployeeIndex = employees.indexOf(employee);
+    currentEmployeeIndex = displayedEmployees.indexOf(employee);
     const modalInfo = document.querySelector('.modal-info-container');
     const birthdayDate = new Date(employee.dob.date);
     const birthday = `${birthdayDate.getMonth()}/${birthdayDate.getDate()}/${birthdayDate.getFullYear()}`;
@@ -109,7 +109,7 @@ const showEmployeeDetail = function (employee) {
     <p class="modal-text">${employee.email}</p>
     <p class="modal-text cap">${employee.location.city}</p>
     <hr>
-    <p class="modal-text">${employee.phone}</p>
+    <p class="modal-text">${employee.cell}</p>
     <p class="modal-text">${address}</p>
     <p class="modal-text">Birthday: ${birthday}</p>`;
 
@@ -118,11 +118,11 @@ const showEmployeeDetail = function (employee) {
 }
 
 function showPrevEmployee() {
-    showEmployeeDetail(employees[currentEmployeeIndex - 1]);
+    showEmployeeDetail(displayedEmployees[currentEmployeeIndex - 1]);
 }
 
 function showNextEmployee() {
-    showEmployeeDetail(employees[currentEmployeeIndex + 1]);
+    showEmployeeDetail(displayedEmployees[currentEmployeeIndex + 1]);
 }
 
 function updateNavButtons() {
@@ -135,11 +135,21 @@ function updateNavButtons() {
         prevButton.disabled = false;
     }
 
-    if (currentEmployeeIndex === employees.length - 1) {
+    if (currentEmployeeIndex === displayedEmployees.length - 1) {
         nextButton.disabled = true;
     } else {
         nextButton.disabled = false;
     }
+}
+
+
+// HELPER FUNCTIONS
+
+const createDiv = function(className) {
+    const div = document.createElement('div');
+    div.classList.add(className);
+
+    return div;
 }
 
 function show(element) {
@@ -150,4 +160,5 @@ function hide(element) {
     element.style.display = 'none';
 }
 
+// Finally, start everything off
 init();
