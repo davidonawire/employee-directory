@@ -18,9 +18,15 @@ async function getJSON(url) {
     }
 }
 
-getJSON(requestURL + `?nat=US&results=${employeeCount}`)
+function init() {
+    getJSON(requestURL + `?nat=US&results=${employeeCount}`)
     .then(response => employees = response.results)
+    .then(createGallery)
     .catch(e => console.error('Error in fetch:', e));
+
+    createModal();
+}
+
 
 const createEmployeeCard = function (employee) {
     const card = createDiv('card');
@@ -34,6 +40,11 @@ const createEmployeeCard = function (employee) {
     cardInfo.innerHTML = `<h3 id="name" class="card-name cap">${employee.name.first} ${employee.name.last}</h3>
                         <p class="card-text">${employee.email}</p>
                         <p class="card-text cap">${employee.location.city}, ${employee.location.state}</p>`
+
+    card.addEventListener('click', () => {
+        showEmployeeDetail(employee);
+        show( document.querySelector('.modal-container') );
+    });
 
     return card;
 }
@@ -53,25 +64,39 @@ function createGallery() {
 
 function createModal() {
     const container = createDiv('modal-container');
+    hide(container);
+    
     const modal = createDiv('modal');
     const modalInfo = createDiv('modal-info-container');
 
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.id = 'modal-close-btn';
-    button.classList.add('modal-close-btn');
-    button.innerHTML = '<strong>X</strong>';
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.id = 'modal-close-btn';
+    closeButton.classList.add('modal-close-btn');
+    closeButton.innerHTML = '<strong>X</strong>';
+
+    const modalNav = createDiv('modal-btn-container');
+    modalNav.innerHTML = `<button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+                        <button type="button" id="modal-next" class="modal-next btn">Next</button>`;
 
     document.querySelector('body').appendChild(container);
     container.appendChild(modal);
-    modal.appendChild(button);
+    modal.appendChild(closeButton);
     modal.appendChild(modalInfo);
+    modal.appendChild(modalNav);
+
+    closeButton.addEventListener('click', () => {
+        hide(container);
+    });
 }
 
 const showEmployeeDetail = function (employee) {
+    const employeeIndex = employees.indexOf(employee);
     const modalInfo = document.querySelector('.modal-info-container');
     const birthdayDate = new Date(employee.dob.date);
     const birthday = `${birthdayDate.getMonth()}/${birthdayDate.getDate()}/${birthdayDate.getFullYear()}`;
+    const address = `${employee.location.street.number} ${employee.location.street.name},
+                     ${employee.location.city}, ${employee.location.state} ${employee.location.postcode}`;
 
     const detailHTML = `<img class="modal-img" src="${employee.picture.large}" alt="profile picture">
     <h3 id="name" class="modal-name cap">${employee.name.first} ${employee.name.last}</h3>
@@ -79,7 +104,7 @@ const showEmployeeDetail = function (employee) {
     <p class="modal-text cap">${employee.location.city}</p>
     <hr>
     <p class="modal-text">${employee.phone}</p>
-    <p class="modal-text">${employee.location.street.number} ${employee.location.street.name}, ${employee.location.city}, ${employee.location.state} ${employee.location.postcode}</p>
+    <p class="modal-text">${address}</p>
     <p class="modal-text">Birthday: ${birthday}</p>`;
 
     modalInfo.innerHTML = detailHTML;
@@ -92,3 +117,5 @@ function show(element) {
 function hide(element) {
     element.style.display = 'none';
 }
+
+init();
