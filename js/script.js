@@ -50,3 +50,28 @@ function createGallery() {
         gallery.appendChild( createEmployeeCard(employee) );
     });
 }
+
+function createModal() {
+    const container = createDiv('modal-container');
+    const modal = createDiv('modal');
+    const modalInfo = createDiv('modal-info-container');
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.id = 'modal-close-btn';
+    button.classList.add('modal-close-btn');
+    button.innerHTML = '<strong>X</strong>';
+
+    document.querySelector('body').appendChild(container);
+    container.appendChild(modal);
+    modal.appendChild(button);
+    modal.appendChild(modalInfo);
+}
+
+function show(element) {
+    element.style.display = 'inherit';
+}
+
+function hide(element) {
+    element.style.display = 'none';
+}
