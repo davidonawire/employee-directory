@@ -31,6 +31,7 @@ function init() {
     .catch(e => console.error('Error in fetch:', e));
 
     createModal();
+    createSearch();
 
     const prevButton = document.getElementById('modal-prev');
     const nextButton = document.getElementById('modal-next');
@@ -65,6 +66,17 @@ const createEmployeeCard = function (employee) {
     });
 
     return card;
+}
+
+
+function createSearch() {
+    const search = document.createElement('form');
+    search.action = '#';
+    search.method = 'get';
+    search.innerHTML = `<input type="search" id="search-input" class="search-input" placeholder="Search...">
+    <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">`;
+
+    document.querySelector('.search-container').appendChild(search);
 }
 
 
