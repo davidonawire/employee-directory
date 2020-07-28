@@ -18,7 +18,7 @@ async function getJSON(url) {
     }
 }
 
-getJSON(requestURL + `?results=${employeeCount}`)
+getJSON(requestURL + `?nat=US&results=${employeeCount}`)
     .then(response => employees = response.results)
     .catch(e => console.error('Error in fetch:', e));
 
@@ -66,6 +66,23 @@ function createModal() {
     container.appendChild(modal);
     modal.appendChild(button);
     modal.appendChild(modalInfo);
+}
+
+const showEmployeeDetail = function (employee) {
+    const modalInfo = document.querySelector('.modal-info-container');
+    const birthdayDate = new Date(employee.dob.date);
+    const birthday = `${birthdayDate.getMonth()}/${birthdayDate.getDate()}/${birthdayDate.getFullYear()}`;
+
+    const detailHTML = `<img class="modal-img" src="${employee.picture.large}" alt="profile picture">
+    <h3 id="name" class="modal-name cap">${employee.name.first} ${employee.name.last}</h3>
+    <p class="modal-text">${employee.email}</p>
+    <p class="modal-text cap">${employee.location.city}</p>
+    <hr>
+    <p class="modal-text">${employee.phone}</p>
+    <p class="modal-text">${employee.location.street.number} ${employee.location.street.name}, ${employee.location.city}, ${employee.location.state} ${employee.location.postcode}</p>
+    <p class="modal-text">Birthday: ${birthday}</p>`;
+
+    modalInfo.innerHTML = detailHTML;
 }
 
 function show(element) {
