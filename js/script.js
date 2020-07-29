@@ -8,9 +8,8 @@ const employeeCount = 12;
 let fetchedEmployees = [];
 let displayedEmployees = [];
 let currentEmployeeIndex = 0;
-const gallery = document.getElementById('gallery');
 
-
+// Handle fetch and JSON parsing of payload
 async function getJSON(url) {
     try {
         const response = await fetch(url);
@@ -20,12 +19,12 @@ async function getJSON(url) {
     }
 }
 
-// Fetch our set of employees, display the initial gallery, and build our details modal
+// Get our set of employees, display the initial gallery, and build our details modal
 function init() {
     getJSON(requestURL + `?nat=US&results=${employeeCount}`)
-    .then(response => fetchedEmployees = response.results)
-    .then(() => showGallery(fetchedEmployees))
-    .catch(e => console.error('Error in fetch:', e));
+        .then(response => fetchedEmployees = response.results)
+        .then(() => showGallery(fetchedEmployees))
+        .catch(e => console.error('Error in fetch:', e));
 
     createModal();
     createSearch();
@@ -38,6 +37,8 @@ function init() {
 
 
 function showGallery(employees) {
+    const gallery = document.getElementById('gallery');
+
     gallery.innerHTML = ''; // Clear previous results, if any
 
     employees.forEach(employee => {
@@ -103,7 +104,9 @@ function createSearch() {
     });
 }
 
-
+/* Create a modal window for displaying a detail view of an employee record,
+*  including Prev and Next buttons for navigating to other records currently
+*  on the grid. */
 function createModal() {
     const container = createDiv('modal-container');
     hide(container);
@@ -132,7 +135,7 @@ function createModal() {
     });
 }
 
-
+// Add details of a specific employee to the modal
 const showEmployeeDetail = function (employee) {
     currentEmployeeIndex = displayedEmployees.indexOf(employee);
     const modalInfo = document.querySelector('.modal-info-container');
@@ -164,7 +167,8 @@ function showNextEmployee() {
     showEmployeeDetail(displayedEmployees[currentEmployeeIndex + 1]);
 }
 
-
+/* Disable Prev or Next buttons if we're at the first or last displayed
+ * record, respectively. */
 function updateNavButtons() {
     const prevButton = document.getElementById('modal-prev');
     const nextButton = document.getElementById('modal-next');
@@ -200,6 +204,7 @@ function doSearch(searchString) {
 
     showGallery(results);
 }
+
 
 // HELPER FUNCTIONS
 
