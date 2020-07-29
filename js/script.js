@@ -28,11 +28,6 @@ function init() {
 
     createModal();
     createSearch();
-
-    const prevButton = document.getElementById('modal-prev');
-    const nextButton = document.getElementById('modal-next');
-    prevButton.addEventListener('click', showPrevEmployee);
-    nextButton.addEventListener('click', showNextEmployee);
 }
 
 
@@ -62,6 +57,7 @@ const createEmployeeCard = function (employee) {
                         <p class="card-text">${employee.email}</p>
                         <p class="card-text cap">${employee.location.city}, ${employee.location.state}</p>`
 
+    // Show detail modal when record card is clicked
     card.addEventListener('click', () => {
         showEmployeeDetail(employee);
         show( document.querySelector('.modal-container') );
@@ -121,8 +117,21 @@ function createModal() {
     closeButton.innerHTML = '<strong>X</strong>';
 
     const modalNav = createDiv('modal-btn-container');
-    modalNav.innerHTML = `<button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-                        <button type="button" id="modal-next" class="modal-next btn">Next</button>`;
+
+    const prevButton = document.createElement('button');
+    prevButton.type = 'button';
+    prevButton.id = 'modal-prev';
+    prevButton.classList.add('modal-prev', 'btn');
+    prevButton.textContent = 'Prev';
+
+    const nextButton = document.createElement('button');
+    nextButton.type = 'button';
+    nextButton.id = 'modal-next';
+    nextButton.classList.add('modal-next', 'btn');
+    nextButton.textContent = 'Next';
+
+    modalNav.appendChild(prevButton);
+    modalNav.appendChild(nextButton);
 
     document.querySelector('body').appendChild(container);
     container.appendChild(modal);
@@ -133,6 +142,9 @@ function createModal() {
     closeButton.addEventListener('click', () => {
         hide(container);
     });
+
+    prevButton.addEventListener('click', showPrevEmployee);
+    nextButton.addEventListener('click', showNextEmployee);
 }
 
 // Add details of a specific employee to the modal
