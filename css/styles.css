@@ -151,11 +151,10 @@ header h1 {
     top: 15px;
     right: 15px;
     cursor: pointer;
-    color: rgba(255, 255, 255, 0.9);
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(255, 255, 255, 0.9);
+    color: rgba(0, 0, 0, 0.8);
     outline: none;
-    border-radius: 0.25em;
-    border: 1px solid rgba(50, 50, 50, 0.3);
+    border: none;
 }
 
 .modal-img {
@@ -198,10 +197,10 @@ header h1 {
     display: inline-block;
     cursor: pointer;
     font-size: 0.85em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255);
     padding: 0.75em 1.5em;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 149, 220, 0.9);
+    border: 1px solid rgba(71, 123, 160, 0.3);
     border-radius: 0.35em;
     transition: .4s ease-out;
     outline: none;
@@ -262,7 +261,7 @@ header h1 {
     }
 
     .btn:enabled:hover {
-        background: rgba(255, 255, 255, 1);
-        color: rgba(25, 25, 25, 1); 
+        background: rgba(1, 110, 160, 0.9);
+        color: rgba(255, 255, 255, 1); 
     }
 }
