@@ -23,11 +23,8 @@ async function getJSON(url) {
 // Fetch our set of employees, display the initial gallery, and build our details modal
 function init() {
     getJSON(requestURL + `?nat=US&results=${employeeCount}`)
-    .then((response) => { 
-        fetchedEmployees = response.results;
-        displayedEmployees = fetchedEmployees;
-    })
-    .then(() => showGallery(displayedEmployees))
+    .then(response => fetchedEmployees = response.results)
+    .then(() => showGallery(fetchedEmployees))
     .catch(e => console.error('Error in fetch:', e));
 
     createModal();
@@ -41,9 +38,13 @@ function init() {
 
 
 function showGallery(employees) {
+    gallery.innerHTML = ''; // Clear previous results, if any
+
     employees.forEach(employee => {
         gallery.appendChild( createEmployeeCard(employee) );
     });
+
+    displayedEmployees = employees;
 }
 
 
@@ -73,10 +74,33 @@ function createSearch() {
     const search = document.createElement('form');
     search.action = '#';
     search.method = 'get';
-    search.innerHTML = `<input type="search" id="search-input" class="search-input" placeholder="Search...">
-    <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">`;
+
+    const searchInput = document.createElement('input');
+    searchInput.type = 'search';
+    searchInput.id = 'search-input';
+    searchInput.classList.add('search-input');
+    searchInput.placeholder = 'Search...'
+
+    const searchButton = document.createElement('input');
+    searchButton.type = 'submit';
+    searchButton.value = String.fromCodePoint('0x1F50D');
+    searchButton.id = 'search-submit';
+    searchButton.classList.add('search-submit');
+
+    search.appendChild(searchInput);
+    search.appendChild(searchButton);
 
     document.querySelector('.search-container').appendChild(search);
+
+    search.addEventListener('submit', (event) => {
+        event.preventDefault();
+        doSearch(searchInput.value);
+    });
+
+    searchInput.addEventListener('input', (event) => {
+        event.preventDefault();
+        doSearch(searchInput.value);
+    });
 }
 
 
@@ -108,6 +132,7 @@ function createModal() {
     });
 }
 
+
 const showEmployeeDetail = function (employee) {
     currentEmployeeIndex = displayedEmployees.indexOf(employee);
     const modalInfo = document.querySelector('.modal-info-container');
@@ -129,13 +154,16 @@ const showEmployeeDetail = function (employee) {
     updateNavButtons();
 }
 
+
 function showPrevEmployee() {
     showEmployeeDetail(displayedEmployees[currentEmployeeIndex - 1]);
 }
 
+
 function showNextEmployee() {
     showEmployeeDetail(displayedEmployees[currentEmployeeIndex + 1]);
 }
+
 
 function updateNavButtons() {
     const prevButton = document.getElementById('modal-prev');
@@ -154,6 +182,24 @@ function updateNavButtons() {
     }
 }
 
+
+function doSearch(searchString) {
+    if (searchString === '') {
+        showGallery(fetchedEmployees);
+        return;
+    }
+
+    const results = fetchedEmployees.filter(employee => {
+        const fullName = `${employee.name.first} ${employee.name.last}`;
+        if ( fullName.toLowerCase().includes( searchString.toLowerCase() ) ) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+
+    showGallery(results);
+}
 
 // HELPER FUNCTIONS
 
