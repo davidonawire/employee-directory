@@ -1,6 +1,7 @@
 /********
  * Employee Directory - A Demonstration of APIs and Async JS
  * 
+ * by David Adams, written as part of the Treehouse Full-Stack JavaScript Techdegree
  */
 
 const requestURL = 'https://randomuser.me/api/';
