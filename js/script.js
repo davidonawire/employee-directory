@@ -41,6 +41,7 @@ function showGallery(employees) {
         gallery.appendChild( createEmployeeCard(employee) );
     });
 
+    // Track the array of currently displayed employees for prev/next buttons to reference
     displayedEmployees = employees;
 }
 
